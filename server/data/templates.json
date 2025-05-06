@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "Template 1",
+    "filename": "template1.png",
+    "dimensions": {
+      "message": "10,10",
+      "company": "10,200",
+      "contact": "10,260"
+    }
+  },
+  {
+    "id": 2,
+    "name": "hr spin",
+    "filename": "1746523441531_Screenshot 2025-05-06 145300.png",
+    "dimensions": {
+      "message": "10,250",
+      "company": "10,200",
+      "contact": "15,350"
+    }
+  }
+]
