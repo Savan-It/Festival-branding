@@ -4,7 +4,7 @@
     "name": "Template 1",
     "filename": "template1.png",
     "dimensions": {
-      "message": "10,10",
+      "address": "10,10",
       "company": "10,200",
       "contact": "10,260"
     }
@@ -14,9 +14,19 @@
     "name": "hr spin",
     "filename": "1746523441531_Screenshot 2025-05-06 145300.png",
     "dimensions": {
-      "message": "10,250",
+      "address": "10,250",
       "company": "10,200",
       "contact": "15,350"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Ganesh Ji",
+    "filename": "1746557258333_cute-ganesh-illustration-vibrant-colors-traditional-attire-large-ears-joyful-expression-hands-raised-blessing-cute-ganesh-355930558.webp",
+    "dimensions": {
+      "address": "616,195",
+      "company": "39,43",
+      "contact": "580,310"
     }
   }
 ]

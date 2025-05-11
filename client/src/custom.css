@@ -19,3 +19,24 @@ body {
 .btn-custom:hover {
   background-color: #0056b3;
 }
+
+.template-thumbnail img {
+  transition: transform 0.2s ease;
+}
+
+.template-thumbnail img:hover {
+  transform: scale(1.1);
+}
+
+.template-thumbnail.selected {
+  border: 2px solid #007bff !important;
+}
+
+img {
+  cursor: crosshair;
+}
+
+button.active {
+  background-color: #007bff !important;
+  color: #fff !important;
+}

@@ -3,8 +3,35 @@ import axios from 'axios';
 import Header from '../components/Header';
 
 function AdminPage() {
-  const [templateData, setTemplateData] = useState({ name: '', dimensions: { message: '', company: '', contact: '' } });
+  const [templateData, setTemplateData] = useState({
+    name: '',
+    dimensions: { message: '', company: '', contact: '' },
+  });
   const [file, setFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [selectedField, setSelectedField] = useState('');
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    setPreviewImage(URL.createObjectURL(selectedFile)); // Preview the selected image
+  };
+
+  const handleImageClick = (e) => {
+    if (!selectedField) {
+      alert('Please select a field (Message, Company, or Contact) to set its position.');
+      return;
+    }
+
+    const rect = e.target.getBoundingClientRect();
+    const x = Math.round(e.clientX - rect.left); // X-coordinate relative to the image
+    const y = Math.round(e.clientY - rect.top); // Y-coordinate relative to the image
+
+    setTemplateData((prevData) => ({
+      ...prevData,
+      dimensions: { ...prevData.dimensions, [selectedField]: `${x},${y}` },
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,50 +73,51 @@ function AdminPage() {
             <input
               type="file"
               className="form-control"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={handleFileChange}
               required
             />
           </div>
-          <div className="form-group mb-3">
-            <label>Message Position (x, y)</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="e.g., 10, 10"
-              value={templateData.dimensions.message}
-              onChange={(e) =>
-                setTemplateData({ ...templateData, dimensions: { ...templateData.dimensions, message: e.target.value } })
-              }
-              required
-            />
-          </div>
-          <div className="form-group mb-3">
-            <label>Company Position (x, y)</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="e.g., 10, 200"
-              value={templateData.dimensions.company}
-              onChange={(e) =>
-                setTemplateData({ ...templateData, dimensions: { ...templateData.dimensions, company: e.target.value } })
-              }
-              required
-            />
-          </div>
-          <div className="form-group mb-3">
-            <label>Contact Position (x, y)</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="e.g., 10, 260"
-              value={templateData.dimensions.contact}
-              onChange={(e) =>
-                setTemplateData({ ...templateData, dimensions: { ...templateData.dimensions, contact: e.target.value } })
-              }
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-custom w-100">Add Template</button>
+          {previewImage && (
+            <div className="mt-4 text-center">
+              <h5>Click on the image to set positions</h5>
+              <img
+                src={previewImage}
+                alt="Preview"
+                className="img-fluid border"
+                style={{ maxWidth: '100%', cursor: 'crosshair' }}
+                onClick={handleImageClick}
+              />
+              <div className="mt-3">
+                <button
+                  type="button"
+                  className={`btn btn-outline-primary me-2 ${selectedField === 'message' ? 'active' : ''}`}
+                  onClick={() => setSelectedField('message')}
+                >
+                  Set Message Position
+                </button>
+                <button
+                  type="button"
+                  className={`btn btn-outline-primary me-2 ${selectedField === 'company' ? 'active' : ''}`}
+                  onClick={() => setSelectedField('company')}
+                >
+                  Set Company Position
+                </button>
+                <button
+                  type="button"
+                  className={`btn btn-outline-primary ${selectedField === 'contact' ? 'active' : ''}`}
+                  onClick={() => setSelectedField('contact')}
+                >
+                  Set Contact Position
+                </button>
+              </div>
+              <div className="mt-3">
+                <p><strong>Message Position:</strong> {templateData.dimensions.message || 'Not set'}</p>
+                <p><strong>Company Position:</strong> {templateData.dimensions.company || 'Not set'}</p>
+                <p><strong>Contact Position:</strong> {templateData.dimensions.contact || 'Not set'}</p>
+              </div>
+            </div>
+          )}
+          <button type="submit" className="btn btn-custom w-100 mt-4">Add Template</button>
         </form>
       </div>
     </div>

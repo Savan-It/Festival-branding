@@ -3,7 +3,7 @@ import axios from 'axios';
 import Header from '../components/Header';
 
 function HomePage() {
-  const [formData, setFormData] = useState({ template: '', company: '', message: '', contact: '' });
+  const [formData, setFormData] = useState({ template: '', company: '', address: '', contact: '' });
   const [templates, setTemplates] = useState([]);
   const [outputImage, setOutputImage] = useState(null);
 
@@ -33,6 +33,10 @@ function HomePage() {
     }
   };
 
+  const handleTemplateSelect = (filename) => {
+    setFormData({ ...formData, template: filename });
+  };
+
   return (
     <div>
       <Header />
@@ -40,20 +44,30 @@ function HomePage() {
         <h2 className="text-center mb-4">Generate Festival Branding</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group mb-3">
-            <label>Template</label>
-            <select
-              className="form-control"
-              value={formData.template}
-              onChange={(e) => setFormData({ ...formData, template: e.target.value })}
-              required
-            >
-              <option value="">Select a template</option>
+            <label>Choose a Template</label>
+            <div className="d-flex flex-wrap">
               {templates.map((template) => (
-                <option key={template.id} value={template.filename}>
-                  {template.name}
-                </option>
+                <div
+                  key={template.id}
+                  className={`template-thumbnail m-2 ${formData.template === template.filename ? 'selected' : ''}`}
+                  onClick={() => handleTemplateSelect(template.filename)}
+                  style={{
+                    border: formData.template === template.filename ? '2px solid #007bff' : '1px solid #ccc',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                    padding: '5px',
+                  }}
+                >
+                  <img
+                    src={`http://localhost:5000/templates/${template.filename}`}
+                    alt={template.name}
+                    className="img-thumbnail"
+                    style={{ width: '250px', height: 'auto', objectFit: 'cover' }}
+                  />
+                  <p className="text-center mt-2" style={{ fontSize: '0.9rem' }}>{template.name}</p>
+                </div>
               ))}
-            </select>
+            </div>
           </div>
           <div className="form-group mb-3">
             <label>Company</label>
@@ -67,13 +81,13 @@ function HomePage() {
             />
           </div>
           <div className="form-group mb-3">
-            <label>Message</label>
+            <label>Address</label>
             <input
               type="text"
               className="form-control"
-              placeholder="Enter message"
-              value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              placeholder="Enter address"
+              value={formData.address}
+              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               required
             />
           </div>
@@ -94,8 +108,14 @@ function HomePage() {
         {outputImage && (
           <div className="mt-4 text-center">
             <h4>Generated Image</h4>
-            <img src={outputImage} alt="Generated" className="img-fluid" />
-            <a href={outputImage} download className="btn btn-success mt-3">Download Image</a>
+            <img src={outputImage} alt="Generated" className="img-fluid mb-3" />
+            <a
+              href={outputImage}
+              download="generated_image.png"
+              className="btn btn-success"
+            >
+              Download Image
+            </a>
           </div>
         )}
       </div>
