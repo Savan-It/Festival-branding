@@ -1,25 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Template 1",
-    "filename": "template1.png",
-    "dimensions": {
-      "address": "10,10",
-      "company": "10,200",
-      "contact": "10,260"
-    }
-  },
-  {
-    "id": 2,
-    "name": "hr spin",
-    "filename": "1746523441531_Screenshot 2025-05-06 145300.png",
-    "dimensions": {
-      "address": "10,250",
-      "company": "10,200",
-      "contact": "15,350"
-    }
-  },
-  {
     "id": 3,
     "name": "Ganesh Ji",
     "filename": "1746557258333_cute-ganesh-illustration-vibrant-colors-traditional-attire-large-ears-joyful-expression-hands-raised-blessing-cute-ganesh-355930558.webp",
@@ -27,6 +7,44 @@
       "address": "616,195",
       "company": "39,43",
       "contact": "580,310"
-    }
+    },
+    "font": "Times New Roman",
+    "color": "#e15958"
+  },
+  {
+    "id": 4,
+    "name": "Diwali",
+    "filename": "1747072639262_Happy-Diwali-wishes-in-english-1024x1024.webp",
+    "dimensions": {
+      "address": "56,922",
+      "company": "330,31",
+      "contact": "717,985"
+    },
+    "font": "Verdana",
+    "color": "#ffffff"
+  },
+  {
+    "id": 6,
+    "name": "Rakshabandhan",
+    "filename": "1747074432566_b68c6e7d996382f4f30f24dfe9651c4d.png",
+    "dimensions": {
+      "address": "91,587",
+      "company": "422,175",
+      "contact": "485,624"
+    },
+    "font": "Times New Roman",
+    "color": "#970001"
+  },
+  {
+    "id": 5,
+    "name": "asdfghnm",
+    "filename": "1747149489185_65905-happy-new-year-ppt-background.png",
+    "dimensions": {
+      "address": "847,614",
+      "company": "898,134",
+      "contact": "833,638"
+    },
+    "font": "Verdana",
+    "color": "#ffffff"
   }
 ]

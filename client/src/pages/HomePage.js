@@ -3,12 +3,11 @@ import axios from 'axios';
 import Header from '../components/Header';
 
 function HomePage() {
-  const [formData, setFormData] = useState({ template: '', company: '', address: '', contact: '' });
   const [templates, setTemplates] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState('');
   const [outputImage, setOutputImage] = useState(null);
 
   useEffect(() => {
-    // Fetch available templates from the server
     const fetchTemplates = async () => {
       try {
         const res = await axios.get('http://localhost:5000/api/templates');
@@ -24,17 +23,17 @@ function HomePage() {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.post('http://localhost:5000/api/generate', formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.post(
+        'http://localhost:5000/api/generate',
+        { template: selectedTemplate }, // Only send the selected template
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setOutputImage(`http://localhost:5000/output/${res.data.image}`);
     } catch (err) {
       alert('Failed to generate image');
     }
-  };
-
-  const handleTemplateSelect = (filename) => {
-    setFormData({ ...formData, template: filename });
   };
 
   return (
@@ -49,10 +48,10 @@ function HomePage() {
               {templates.map((template) => (
                 <div
                   key={template.id}
-                  className={`template-thumbnail m-2 ${formData.template === template.filename ? 'selected' : ''}`}
-                  onClick={() => handleTemplateSelect(template.filename)}
+                  className={`template-thumbnail m-2 ${selectedTemplate === template.filename ? 'selected' : ''}`}
+                  onClick={() => setSelectedTemplate(template.filename)}
                   style={{
-                    border: formData.template === template.filename ? '2px solid #007bff' : '1px solid #ccc',
+                    border: selectedTemplate === template.filename ? '2px solid #007bff' : '1px solid #ccc',
                     borderRadius: '5px',
                     cursor: 'pointer',
                     padding: '5px',
@@ -69,40 +68,9 @@ function HomePage() {
               ))}
             </div>
           </div>
-          <div className="form-group mb-3">
-            <label>Company</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter company name"
-              value={formData.company}
-              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group mb-3">
-            <label>Address</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter address"
-              value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group mb-3">
-            <label>Contact</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter contact details"
-              value={formData.contact}
-              onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-custom w-100">Generate</button>
+          <button type="submit" className="btn btn-custom w-100" disabled={!selectedTemplate}>
+            Generate
+          </button>
         </form>
 
         {outputImage && (
@@ -111,8 +79,8 @@ function HomePage() {
             <img src={outputImage} alt="Generated" className="img-fluid mb-3" />
             <a
               href={outputImage}
-              download="generated_image.png"
               className="btn btn-success"
+              download
             >
               Download Image
             </a>

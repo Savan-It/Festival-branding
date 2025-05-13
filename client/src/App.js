@@ -6,6 +6,7 @@ import PreviewPage from './pages/PreviewPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminPage from './pages/AdminPage';
+import ProfilePage from './pages/ProfilePage';
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem('token');
@@ -15,6 +16,8 @@ function PrivateRoute({ children }) {
 function App() {
   return (
     <Router>
+
+      
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -43,6 +46,7 @@ function App() {
           }
         />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );

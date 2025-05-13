@@ -5,11 +5,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './custom.css'; // Optional: Add your custom theme overrides
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { UserProvider } from './context/UserContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <UserProvider>
+      <App />
+    </UserProvider>
   </React.StrictMode>
 );
 

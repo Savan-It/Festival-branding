@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
 
 function Header() {
+  const { role } = useContext(UserContext);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
@@ -27,10 +29,17 @@ function Header() {
               </Link>
             </li>
             <li className="nav-item">
+              <Link className="nav-link" to="/profile">
+                Profile
+              </Link>
+            </li>
+            {role === 'admin' &&
+            <li className="nav-item">
               <Link className="nav-link" to="/admin">
                 Admin
               </Link>
             </li>
+            }
             <li className="nav-item">
               <Link className="nav-link" to="/login">
                 Logout

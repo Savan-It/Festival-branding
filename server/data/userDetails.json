@@ -1,0 +1,20 @@
+[
+  {
+    "username": "admin",
+    "password": "$2b$10$VxPGa02nOth9q4rQoPFv8.rUw7G9aMhObDszYcdPYxfAvLUPZpAm2"
+  },
+  {
+    "username": "Savan Prajapati",
+    "password": "$2b$10$ysVRZah43c/CeXlg4g/OR.Wxwb0HaZPbP/DOYGVD1YIwIqIYBMREm",
+    "company": "Kumbh corp",
+    "address": "43, tanariri green palace, america 987-4566789o",
+    "contact": "+98 8787878787"
+  },
+  {
+    "username": "Kiran Khoda",
+    "password": "$2b$10$LBkqp3y3cDuJmUlyeU1v3eFr9ubkyMNqL5.OTAzZYFJkf7urCF0ha",
+    "company": "Testing Site",
+    "address": "205, glory 11, ahmedabad",
+    "contact": "1234567890"
+  }
+]
