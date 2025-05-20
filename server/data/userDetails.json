@@ -1,13 +1,16 @@
 [
   {
     "username": "admin",
-    "password": "$2b$10$VxPGa02nOth9q4rQoPFv8.rUw7G9aMhObDszYcdPYxfAvLUPZpAm2"
+    "password": "$2b$10$VxPGa02nOth9q4rQoPFv8.rUw7G9aMhObDszYcdPYxfAvLUPZpAm2",
+    "company": "Artvision enterprise",
+    "address": "201, gurukrupa square, Ahmedabad - 380001",
+    "contact": "+91 7894561230"
   },
   {
     "username": "Savan Prajapati",
     "password": "$2b$10$ysVRZah43c/CeXlg4g/OR.Wxwb0HaZPbP/DOYGVD1YIwIqIYBMREm",
     "company": "Kumbh corp",
-    "address": "43, tanariri green palace, america 987-4566789o",
+    "address": "43, tanariri green palace, america",
     "contact": "+98 8787878787"
   },
   {
@@ -16,5 +19,12 @@
     "company": "Testing Site",
     "address": "205, glory 11, ahmedabad",
     "contact": "1234567890"
+  },
+  {
+    "username": "DEmo person",
+    "password": "$2b$10$385kInsRki3DNRD.wKRg.e7Sm6XWiWeVPgY68c5QJIgKS/E5Yybwy",
+    "company": "Demo Company",
+    "address": "201, tanariri square, ahmedabad - 380001",
+    "contact": "+91 7894561230"
   }
 ]

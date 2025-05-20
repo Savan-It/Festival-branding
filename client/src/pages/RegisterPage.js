@@ -19,7 +19,7 @@ function RegisterPage() {
       alert('Registration successful! Please log in.');
       navigate('/login');
     } catch (err) {
-      alert('Registration failed. Please try again.');
+      alert(err.response?.data?.message || 'Something went wrong');
     }
   };
 
@@ -48,6 +48,7 @@ function RegisterPage() {
                     type="password"
                     className="form-control"
                     placeholder="Enter password"
+                    autoComplete ="new-password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     required
@@ -66,13 +67,13 @@ function RegisterPage() {
                 </div>
                 <div className="form-group mb-3">
                   <label>Address</label>
-                  <input
-                    type="text"
+                  <textarea
                     className="form-control"
                     placeholder="Enter address"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                     required
+                    rows={3}
                   />
                 </div>
                 <div className="form-group mb-3">

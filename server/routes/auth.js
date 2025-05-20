@@ -37,7 +37,7 @@ router.post('/register', async (req, res) => {
 
     // Check if the user already exists
     if (users.find((u) => u.username === username)) {
-      return res.status(400).send('User already exists');
+      return res.status(400).json({ message: 'User already exists' });
     }
 
     // Hash the password and save the user
@@ -62,7 +62,7 @@ router.post('/login', async (req, res) => {
     // Find the user in the JSON file
     const user = users.find((u) => u.username === username);
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).send('Invalid credentials');
+      return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     // Determine the user's role (e.g., admin or user)
@@ -108,7 +108,7 @@ router.put('/profile', authenticateToken, (req, res) => {
     // Find the user and update their details
     const userIndex = users.findIndex((u) => u.username === username);
     if (userIndex === -1) {
-      return res.status(404).send('User not found');
+      return res.status(404).json({ message: 'User not found' });
     }
 
     users[userIndex] = { ...users[userIndex], company, address, contact };
