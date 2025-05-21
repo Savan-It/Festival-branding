@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
+import Draggable from 'react-draggable';
 
 function AdminPage() {
-  const [templates, setTemplates] = useState([]); // State to store all templates
+  const [templates, setTemplates] = useState([]);
   const [templateData, setTemplateData] = useState({
     name: '',
-    dimensions: { address: '', company: '', contact: '' },
+    dimensions: { address: '0,0', company: '0,0', contact: '0,0' },
     font: '',
     color: '#000000',
   });
   const [file, setFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
-  const [selectedField, setSelectedField] = useState('');
-  const [editingTemplateId, setEditingTemplateId] = useState(null); // Track if editing a template
-  const [showForm, setShowForm] = useState(false); // Toggle form visibility
-
-  // Fetch all templates on component mount
+  const [editingTemplateId, setEditingTemplateId] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const nodeRef = React.useRef(null);
   useEffect(() => {
     fetchTemplates();
   }, []);
@@ -36,22 +35,6 @@ function AdminPage() {
     setPreviewImage(URL.createObjectURL(selectedFile));
   };
 
-  const handleImageClick = (e) => {
-    if (!selectedField) {
-      alert('Please select a field (address, Company, or Contact) to set its position.');
-      return;
-    }
-
-    const rect = e.target.getBoundingClientRect();
-    const x = Math.round(e.clientX - rect.left);
-    const y = Math.round(e.clientY - rect.top);
-
-    setTemplateData((prevData) => ({
-      ...prevData,
-      dimensions: { ...prevData.dimensions, [selectedField]: `${x},${y}` },
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -64,13 +47,11 @@ function AdminPage() {
 
     try {
       if (editingTemplateId) {
-        // Update existing template
         await axios.put(`http://localhost:5000/api/templates/${editingTemplateId}`, formData, {
           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
         });
         alert('Template updated successfully');
       } else {
-        // Add new template
         await axios.post('http://localhost:5000/api/templates', formData, {
           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
         });
@@ -113,15 +94,32 @@ function AdminPage() {
   const resetForm = () => {
     setTemplateData({
       name: '',
-      dimensions: { address: '', company: '', contact: '' },
+      dimensions: { address: '0,0', company: '0,0', contact: '0,0' },
       font: '',
       color: '#000000',
     });
     setFile(null);
     setPreviewImage(null);
-    setSelectedField('');
     setEditingTemplateId(null);
     setShowForm(false);
+  };
+
+  const getFieldPosition = (field) => {
+    const coords = templateData.dimensions[field]?.split(',') || ['0', '0'];
+    return {
+      x: parseInt(coords[0], 10) || 0,
+      y: parseInt(coords[1], 10) || 0,
+    };
+  };
+
+  const updateFieldPosition = (field, x, y) => {
+    setTemplateData((prev) => ({
+      ...prev,
+      dimensions: {
+        ...prev.dimensions,
+        [field]: `${x},${Math.abs(y)}`,
+      },
+    }));
   };
 
   return (
@@ -130,14 +128,12 @@ function AdminPage() {
       <div className="container mt-5">
         <h2 className="text-center mb-4">Admin - Manage Templates</h2>
 
-        {/* Button to toggle form */}
         {!showForm && (
           <button className="btn btn-primary mb-4" onClick={() => setShowForm(true)}>
             Add Template
           </button>
         )}
 
-        {/* Form to Add/Edit Template */}
         {showForm && (
           <form onSubmit={handleSubmit}>
             <div className="form-group mb-3">
@@ -157,7 +153,7 @@ function AdminPage() {
                 type="file"
                 className="form-control"
                 onChange={handleFileChange}
-                required={!editingTemplateId} // File is required only for new templates
+                required={!editingTemplateId}
               />
             </div>
             <div className="form-group mb-3">
@@ -185,42 +181,50 @@ function AdminPage() {
                 required
               />
             </div>
+
             {previewImage && (
               <div className="mt-4 text-center">
-                <h5>Click on the image to set positions</h5>
-                <img
-                  src={previewImage}
-                  alt="Preview"
-                  className="img-fluid border"
-                  style={{ maxWidth: '100%', cursor: 'crosshair' }}
-                  onClick={handleImageClick}
-                />
-                <div className="mt-3">
-                  <button
-                    type="button"
-                    className={`btn btn-outline-primary me-2 ${selectedField === 'address' ? 'active' : ''}`}
-                    onClick={() => setSelectedField('address')}
-                  >
-                    Set Address Position
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-primary me-2 ${selectedField === 'company' ? 'active' : ''}`}
-                    onClick={() => setSelectedField('company')}
-                  >
-                    Set Company Position
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-primary ${selectedField === 'contact' ? 'active' : ''}`}
-                    onClick={() => setSelectedField('contact')}
-                  >
-                    Set Contact Position
-                  </button>
+                <h5>Drag the fields to set their positions</h5>
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    className="img-fluid border"
+                    style={{ maxWidth: '100%' }}
+                  />
+                  {['address', 'company', 'contact'].map((field) => {
+                    const position = getFieldPosition(field);
+                    return (
+                      <Draggable
+                        nodeRef={nodeRef}
+                        key={field}
+                        position={{ x: position.x, y: position.y }}
+                        onDrag={(e, data) => updateFieldPosition(field, data.x, data.y)}
+                      >
+                        <div
+                        ref={nodeRef}
+                          style={{
+                            position: 'absolute',
+                            padding: '5px 10px',
+                            backgroundColor: templateData.color,
+                            color: '#fff',
+                            fontFamily: templateData.font,
+                            borderRadius: '4px',
+                            cursor: 'move',
+                            userSelect: 'none',
+                            zIndex: 10,
+                          }}
+                        >
+                          {field.toUpperCase()}
+                        </div>
+                      </Draggable>
+                    );
+                  })}
                 </div>
               </div>
             )}
-            <button type="submit" className="btn btn-custom w-100 mt-4">
+
+            <button type="submit" className="btn btn-success w-100 mt-4">
               {editingTemplateId ? 'Update Template' : 'Add Template'}
             </button>
             <button type="button" className="btn btn-secondary w-100 mt-2" onClick={resetForm}>
@@ -229,7 +233,6 @@ function AdminPage() {
           </form>
         )}
 
-        {/* List of Templates */}
         {!showForm && (
           <div className="mt-5">
             <h3 className="text-center mb-4">Existing Templates</h3>
@@ -258,16 +261,10 @@ function AdminPage() {
                       ></div>
                     </td>
                     <td>
-                      <button
-                        className="btn btn-primary me-2"
-                        onClick={() => handleEdit(template)}
-                      >
+                      <button className="btn btn-primary me-2" onClick={() => handleEdit(template)}>
                         Edit
                       </button>
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => handleDelete(template.id)}
-                      >
+                      <button className="btn btn-danger" onClick={() => handleDelete(template.id)}>
                         Delete
                       </button>
                     </td>

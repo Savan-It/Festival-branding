@@ -46,5 +46,17 @@
     },
     "font": "Verdana",
     "color": "#fb741a"
+  },
+  {
+    "id": 5,
+    "name": "lohri",
+    "filename": "1747765788779_lohri-wishes.webp",
+    "dimensions": {
+      "address": "885,224",
+      "company": "832,560",
+      "contact": "891,89"
+    },
+    "font": "Verdana",
+    "color": "#b91313"
   }
 ]
